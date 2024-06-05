@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "./proto";
+
+service CVService {
+  rpc GetAll(GetAllRequest) returns (GetAllResponse);
+}
+
+message CVResponse {
+  string firstName = 1;
+  string lastName = 2;
+  string city = 3;
+  int32 experience = 4;
+  repeated string skills = 5;
+}
+
+message GetAllRequest {}
+
+message GetAllResponse {
+  repeated CVResponse cvs = 1;
+}

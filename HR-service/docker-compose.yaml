@@ -1,0 +1,49 @@
+services:
+  hr-service:
+    image: itis_grps_homework_4:latest
+    container_name: hr-service
+    depends_on:
+      - cv-service
+      - job-service
+    ports:
+      - "8080:8080"
+    environment:
+      - CV_SERVICE_HOST=cv-service
+      - JOB_SERVICE_HOST=job-service
+    networks:
+      - hr
+  cv-service:
+    image: itis-cv-server-hw-4:latest
+    depends_on:
+      - mongo
+    container_name: cv-service
+    ports:
+      - "5001:5001"
+    environment:
+      - CONFIG_PATH=./configs/config.yml
+    networks:
+      - hr
+  job-service:
+    image: itis-job-server-hw-4:latest
+    depends_on:
+      - mongo
+    container_name: job-service
+    ports:
+      - "5000:5000"
+    environment:
+      - CONFIG_PATH=./configs/config.yml
+    networks:
+      - hr
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - "/var/lib/mongodb:/data/db"
+    networks:
+      - hr
+
+networks:
+  hr:
+    driver: bridge
